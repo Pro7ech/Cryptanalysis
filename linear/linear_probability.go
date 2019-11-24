@@ -1,19 +1,18 @@
 package linear
 
-import(
+import (
 	"github.com/cryptanalysis/utils"
 	"sort"
 )
 
-
 type linear_probability struct {
-	in uint64
-	out uint64
+	in    uint64
+	out   uint64
 	lpInt int64
 	lpFlo float64
 }
 
-func compute_linear_probability(sbox []uint64) (result []*linear_probability){
+func compute_linear_probability(sbox []uint64) (result []*linear_probability) {
 
 	var tmp int64
 
@@ -21,17 +20,16 @@ func compute_linear_probability(sbox []uint64) (result []*linear_probability){
 
 	result = make([]*linear_probability, (sbox_size-1)*(sbox_size-1))
 
-
 	index := 0
 
-	for i := uint64(1) ; i < sbox_size ; i++ {
+	for i := uint64(1); i < sbox_size; i++ {
 
-		for j := uint64(1) ; j < sbox_size ; j++ {
+		for j := uint64(1); j < sbox_size; j++ {
 
-			tmp = - int64((sbox_size>>1))
+			tmp = -int64((sbox_size >> 1))
 
-			for k := uint64(0) ; k < sbox_size; k++ {
-				tmp += int64(utils.Parity((i & k) ^ (sbox[k] & j)))
+			for k := uint64(0); k < sbox_size; k++ {
+				tmp += int64(utils.P[(i&k)^(sbox[k]&j)])
 			}
 
 			result[index] = new(linear_probability)
@@ -45,10 +43,10 @@ func compute_linear_probability(sbox []uint64) (result []*linear_probability){
 
 	process_result(result, sbox_size)
 
-	return 
+	return
 }
 
-func process_result(result []*linear_probability, sbox_size uint64){
+func process_result(result []*linear_probability, sbox_size uint64) {
 
 	sort.Slice(result, func(i, j int) bool {
 		return result[i].lpInt > result[j].lpInt

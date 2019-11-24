@@ -1,8 +1,8 @@
 package linear
 
-import(
-	"github.com/cryptanalysis/utils"
+import (
 	"crypto/rand"
+	"github.com/cryptanalysis/utils"
 	"math"
 	"sort"
 )
@@ -19,40 +19,40 @@ var S8_2_INV = [256]uint8{156, 240, 91, 53, 44, 72, 46, 74, 95, 49, 158, 242, 23
 var S8_3_INV = [256]uint8{139, 229, 72, 36, 248, 156, 254, 154, 78, 34, 137, 231, 59, 93, 57, 95, 97, 15, 99, 13, 209, 183, 22, 114, 166, 202, 160, 204, 16, 116, 211, 181, 180, 208, 117, 19, 205, 163, 207, 161, 119, 17, 178, 214, 12, 96, 10, 102, 90, 62, 92, 56, 226, 142, 39, 73, 159, 249, 157, 251, 37, 75, 228, 136, 236, 184, 45, 123, 173, 243, 175, 241, 47, 121, 234, 190, 108, 48, 106, 54, 2, 86, 4, 80, 130, 222, 71, 25, 199, 145, 197, 147, 69, 27, 132, 216, 221, 131, 28, 64, 148, 192, 146, 198, 26, 70, 223, 129, 85, 3, 87, 1, 55, 105, 53, 107, 191, 233, 122, 46, 242, 174, 244, 168, 124, 40, 189, 235, 176, 212, 115, 21, 203, 165, 201, 167, 113, 23, 182, 210, 8, 100, 14, 98, 94, 58, 88, 60, 230, 138, 33, 79, 153, 255, 155, 253, 35, 77, 224, 140, 141, 227, 76, 32, 252, 152, 250, 158, 74, 38, 143, 225, 61, 91, 63, 89, 103, 9, 101, 11, 215, 177, 18, 118, 162, 206, 164, 200, 20, 112, 213, 179, 232, 188, 43, 125, 171, 245, 169, 247, 41, 127, 238, 186, 104, 52, 110, 50, 6, 82, 0, 84, 134, 218, 65, 31, 193, 151, 195, 149, 67, 29, 128, 220, 219, 133, 24, 68, 144, 196, 150, 194, 30, 66, 217, 135, 83, 5, 81, 7, 49, 111, 51, 109, 185, 239, 126, 42, 246, 170, 240, 172, 120, 44, 187, 237}
 var S8_4_INV = [256]uint8{9, 101, 85, 50, 114, 179, 120, 193, 72, 58, 144, 142, 29, 34, 232, 139, 53, 35, 59, 190, 5, 227, 2, 36, 151, 100, 3, 191, 97, 4, 39, 15, 136, 189, 209, 237, 210, 22, 176, 56, 225, 163, 175, 207, 235, 27, 157, 244, 33, 249, 75, 250, 184, 118, 192, 161, 201, 171, 108, 69, 8, 246, 197, 0, 203, 147, 52, 63, 128, 74, 102, 208, 134, 183, 68, 71, 111, 86, 185, 89, 94, 230, 166, 178, 149, 132, 25, 109, 234, 124, 88, 65, 104, 248, 217, 99, 16, 123, 60, 103, 236, 112, 224, 180, 252, 241, 153, 20, 107, 32, 93, 167, 238, 38, 154, 87, 200, 223, 187, 80, 30, 84, 110, 96, 40, 82, 253, 168, 37, 243, 165, 48, 218, 83, 81, 122, 226, 206, 133, 42, 202, 213, 174, 143, 12, 138, 61, 220, 28, 76, 205, 77, 78, 181, 49, 146, 31, 182, 214, 126, 131, 92, 169, 140, 195, 159, 221, 13, 106, 135, 43, 54, 41, 95, 129, 219, 10, 141, 119, 199, 62, 46, 14, 160, 211, 127, 21, 162, 79, 216, 23, 245, 164, 156, 67, 51, 155, 137, 19, 145, 196, 255, 91, 215, 170, 194, 26, 90, 7, 239, 18, 254, 73, 121, 1, 198, 55, 130, 105, 186, 231, 152, 172, 66, 177, 17, 6, 188, 44, 45, 115, 11, 70, 64, 47, 148, 57, 228, 229, 113, 117, 24, 233, 212, 158, 204, 125, 247, 150, 222, 251, 116, 240, 242, 173, 98}
 
-func S(x *[8]uint8){
+func S(x *[8]uint8) {
 	x[0] = S8_0[x[0]]
-    x[1] = S8_1[x[1]]
-    x[2] = S8_2[x[2]]
-    x[3] = S8_3[x[3]]
-    x[4] = S8_1[x[4]]
-    x[5] = S8_2[x[5]]
-    x[6] = S8_3[x[6]]
-    x[7] = S8_0[x[7]]
+	x[1] = S8_1[x[1]]
+	x[2] = S8_2[x[2]]
+	x[3] = S8_3[x[3]]
+	x[4] = S8_1[x[4]]
+	x[5] = S8_2[x[5]]
+	x[6] = S8_3[x[6]]
+	x[7] = S8_0[x[7]]
 }
 
-func SInv(x *[8]uint8){
+func SInv(x *[8]uint8) {
 	x[0] = S8_0_INV[x[0]]
-    x[1] = S8_1_INV[x[1]]
-    x[2] = S8_2_INV[x[2]]
-    x[3] = S8_3_INV[x[3]]
-    x[4] = S8_1_INV[x[4]]
-    x[5] = S8_2_INV[x[5]]
-    x[6] = S8_3_INV[x[6]]
-    x[7] = S8_0_INV[x[7]]
+	x[1] = S8_1_INV[x[1]]
+	x[2] = S8_2_INV[x[2]]
+	x[3] = S8_3_INV[x[3]]
+	x[4] = S8_1_INV[x[4]]
+	x[5] = S8_2_INV[x[5]]
+	x[6] = S8_3_INV[x[6]]
+	x[7] = S8_0_INV[x[7]]
 }
 
 func P(x *[8]uint8) {
 
 	z0, z1, z2, z3, z4, z5, z6, z7 := x[0], x[1], x[2], x[3], x[4], x[5], x[6], x[7]
 
-    x[0] = z2 ^ z3 ^ z4 ^ z6 ^ z7
-    x[1] = z0 ^ z1 ^ z3 ^ z4 ^ z7
-    x[2] = z0 ^ z1 ^ z4 ^ z5 ^ z6
-    x[3] = z1 ^ z2 ^ z3 ^ z5 ^ z6
-    x[4] = z0 ^ z2 ^ z3 ^ z6 ^ z7
-    x[5] = z0 ^ z3 ^ z4 ^ z5 ^ z7
-    x[6] = z0 ^ z1 ^ z2 ^ z4 ^ z5
-    x[7] = z1 ^ z2 ^ z5 ^ z6 ^ z7
+	x[0] = z2 ^ z3 ^ z4 ^ z6 ^ z7
+	x[1] = z0 ^ z1 ^ z3 ^ z4 ^ z7
+	x[2] = z0 ^ z1 ^ z4 ^ z5 ^ z6
+	x[3] = z1 ^ z2 ^ z3 ^ z5 ^ z6
+	x[4] = z0 ^ z2 ^ z3 ^ z6 ^ z7
+	x[5] = z0 ^ z3 ^ z4 ^ z5 ^ z7
+	x[6] = z0 ^ z1 ^ z2 ^ z4 ^ z5
+	x[7] = z1 ^ z2 ^ z5 ^ z6 ^ z7
 }
 
 func keySchedule(key [8]uint8) (keys [6][8]uint8) {
@@ -60,16 +60,16 @@ func keySchedule(key [8]uint8) (keys [6][8]uint8) {
 	var a, b *[8]uint8
 
 	a = &keys[0]
-	for i := 0 ; i < 8 ; i++ {
+	for i := 0; i < 8; i++ {
 		a[i] = key[i]
 	}
 
-	for i := 1 ; i <6 ; i++ {
+	for i := 1; i < 6; i++ {
 
 		a = &keys[i-1]
 		b = &keys[i]
 
-		for j := 0 ; j < 8 ; j++ {
+		for j := 0; j < 8; j++ {
 			b[j] = a[j]
 		}
 
@@ -81,44 +81,44 @@ func keySchedule(key [8]uint8) (keys [6][8]uint8) {
 	return keys
 }
 
-func keyScheduleInv(key [8]uint8) (keys [6][8]uint8){
+func keyScheduleInv(key [8]uint8) (keys [6][8]uint8) {
 	var a, b *[8]uint8
 
 	a = &keys[5]
-	for i := 0 ; i < 8 ; i++ {
+	for i := 0; i < 8; i++ {
 		a[i] = key[i]
 	}
 
-	for i := 4 ; i >=0 ; i-- {
+	for i := 4; i >= 0; i-- {
 
 		a = &keys[i+1]
 		b = &keys[i]
 
-		for j := 0 ; j < 8 ; j++ {
+		for j := 0; j < 8; j++ {
 			b[j] = a[j]
 		}
 
 		SInv(b)
-	    P(b)
-	    SInv(b)
+		P(b)
+		SInv(b)
 	}
 
 	return keys
 }
 
 func K(a, b *[8]uint8) {
-	for i := 0 ; i < 8 ; i++ {
+	for i := 0; i < 8; i++ {
 		a[i] ^= b[i]
 	}
 }
 
 func Encrypt(x *[8]uint8, k [6][8]uint8, y *[8]uint8) {
 
-	for i := 0 ; i < 8 ; i++ {
+	for i := 0; i < 8; i++ {
 		y[i] = x[i]
 	}
 
-	for i := 0 ; i < 4 ; i++ {
+	for i := 0; i < 4; i++ {
 		K(y, &k[i])
 		S(y)
 		P(y)
@@ -126,7 +126,7 @@ func Encrypt(x *[8]uint8, k [6][8]uint8, y *[8]uint8) {
 
 	K(y, &k[4])
 
-	for i := 0 ; i < 8 ; i++ {
+	for i := 0; i < 8; i++ {
 		y[i] = S8_4[y[i]]
 	}
 
@@ -136,31 +136,30 @@ func Encrypt(x *[8]uint8, k [6][8]uint8, y *[8]uint8) {
 
 func Decrypt(x *[8]uint8, k [6][8]uint8, y *[8]uint8) {
 
-	for i := 0 ; i < 8 ; i++ {
+	for i := 0; i < 8; i++ {
 		y[i] = x[i]
 	}
 
 	K(y, &k[5])
 
-	for i := 0 ; i < 8 ; i++ {
+	for i := 0; i < 8; i++ {
 		y[i] = S8_4_INV[y[i]]
 	}
 
 	K(y, &k[4])
 
-	for i := 3; i >= 0 ; i-- {
+	for i := 3; i >= 0; i-- {
 		P(y)
 		SInv(y)
 		K(y, &k[i])
 	}
 }
 
-func Abs(x int64) (int64){
+func Abs(x int64) int64 {
 	return int64(math.Abs(float64(x)))
 }
 
-
-func RecoverKey(k [8]uint8) (bool) {
+func RecoverKey(k [8]uint8) bool {
 
 	var keys = keySchedule(k)
 
@@ -173,10 +172,10 @@ func RecoverKey(k [8]uint8) (bool) {
 
 	tmp := make([]byte, 8)
 
-	for i := 0 ; i < n ; i++ {
+	for i := 0; i < n; i++ {
 		rand.Read(tmp)
 
-		for j := 0 ; j < 8 ; j++ {
+		for j := 0; j < 8; j++ {
 			plaintexts[i][j] = uint8(tmp[j])
 		}
 
@@ -185,7 +184,7 @@ func RecoverKey(k [8]uint8) (bool) {
 
 	type candidate struct {
 		bias int64
-		key uint8
+		key  uint8
 	}
 
 	k_guesses := make([][]*candidate, 8)
@@ -194,37 +193,37 @@ func RecoverKey(k [8]uint8) (bool) {
 
 	var p, c uint8
 
-	for i := 0 ; i < 8 ; i++ {
+	for i := 0; i < 8; i++ {
 
 		// We have two valide linear paths
 		var k_0 [256]int64
 		var k_1 [256]int64
 
-		for j := 0 ; j < 256; j++ {
-			k_0[j] = -(int64(n)/2)
-			k_1[j] = -(int64(n)/2)
+		for j := 0; j < 256; j++ {
+			k_0[j] = -(int64(n) / 2)
+			k_1[j] = -(int64(n) / 2)
 		}
 
-		for j := 0 ; j < n ; j++ {
-			
+		for j := 0; j < n; j++ {
+
 			p = plaintexts[j][i]
 
-			for k := 0 ; k < 256 ; k++ {
+			for k := 0; k < 256; k++ {
 
 				ki := uint8(k)
 
 				// partial decryption of the byte i
-				c = S8_4_INV[ciphertexts[j][i] ^ ki] 
+				c = S8_4_INV[ciphertexts[j][i]^ki]
 
 				// Increments when the linear paths hold
-				k_0[ki] += int64(utils.P[(p & uint8(0x41)) ^ (c & uint8(0x51))])
-				k_1[ki] += int64(utils.P[(p & uint8(0x41)) ^ (c & uint8(0x14))])
+				k_0[ki] += int64(utils.P[(p&uint8(0x41))^(c&uint8(0x51))])
+				k_1[ki] += int64(utils.P[(p&uint8(0x41))^(c&uint8(0x14))])
 			}
 		}
 
 		// One has a high probability of occurence, while the other has a high probabily of not occuring.
 		// We count the bias with their respective absolute value.
-		for j := 0 ; j < 256 ; j++ {
+		for j := 0; j < 256; j++ {
 			candidates[j] = new(candidate)
 			candidates[j].bias = Abs(k_0[j]) + Abs(k_1[j])
 			candidates[j].key = uint8(j)
@@ -236,39 +235,39 @@ func RecoverKey(k [8]uint8) (bool) {
 		})
 
 		k_guesses[i] = make([]*candidate, 5)
-		for j := 0 ; j < 5 ; j++ {
+		for j := 0; j < 5; j++ {
 			k_guesses[i][j] = candidates[j]
 		}
 	}
 
 	/*
-	for i := range k_guesses{
-		for j := range k_guesses[i]{
-			fmt.Printf("%d %d %02x \n", i, k_guesses[i][j].bias , k_guesses[i][j].key)
+		for i := range k_guesses{
+			for j := range k_guesses[i]{
+				fmt.Printf("%d %d %02x \n", i, k_guesses[i][j].bias , k_guesses[i][j].key)
+			}
+			fmt.Println()
 		}
-		fmt.Println()
-	}
 	*/
 
 	for k0 := range k_guesses[0] {
-		for k1 := range k_guesses[1]{
-			for k2 := range k_guesses[2]{
-				for k3 := range k_guesses[3]{
-					for k4 := range k_guesses[4]{
-						for k5 := range k_guesses[5]{
-							for k6 := range k_guesses[6]{
-								for k7 := range k_guesses[7]{
+		for k1 := range k_guesses[1] {
+			for k2 := range k_guesses[2] {
+				for k3 := range k_guesses[3] {
+					for k4 := range k_guesses[4] {
+						for k5 := range k_guesses[5] {
+							for k6 := range k_guesses[6] {
+								for k7 := range k_guesses[7] {
 
-									keys := keyScheduleInv([8]uint8{k_guesses[0][k0].key, k_guesses[1][k1].key, 
-																	k_guesses[2][k2].key, k_guesses[3][k3].key, 
-																	k_guesses[4][k4].key, k_guesses[5][k5].key, 
-																	k_guesses[6][k6].key, k_guesses[7][k7].key})
-									
+									keys := keyScheduleInv([8]uint8{k_guesses[0][k0].key, k_guesses[1][k1].key,
+										k_guesses[2][k2].key, k_guesses[3][k3].key,
+										k_guesses[4][k4].key, k_guesses[5][k5].key,
+										k_guesses[6][k6].key, k_guesses[7][k7].key})
+
 									var test [8]uint8
 
 									state := false
-									for i := 0 ; i < 10 ; i++ {
-				
+									for i := 0; i < 10; i++ {
+
 										Encrypt(&plaintexts[i], keys, &test)
 
 										state = state || equalSlice(ciphertexts[i], test)
@@ -277,17 +276,17 @@ func RecoverKey(k [8]uint8) (bool) {
 									if state {
 										return true
 									}
-				
+
 								}
-								
+
 							}
-							
+
 						}
-						
+
 					}
-					
+
 				}
-				
+
 			}
 
 		}
